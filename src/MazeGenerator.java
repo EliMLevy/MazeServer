@@ -31,22 +31,41 @@ public class MazeGenerator {
         // move current position
         // if there are no more posible moves pop a position off the stack
 
-        int startTop = (int) (Math.random() * (cols - 4) + 2);
-        int startBottom = (int) (Math.random() * (cols - 4) + 2);
-        int startRight = (int) (Math.random() * (rows - 4) + 2);
-        int startLeft = (int) (Math.random() * (rows - 4) + 2);
+        List<Tree> trees = new ArrayList<>();
 
-        Tree top = new Tree(new Vec(startTop, 0));
-        Tree bottom = new Tree(new Vec(startBottom, rows - 1));
-        Tree left = new Tree(new Vec(0, startLeft));
-        Tree right = new Tree(new Vec(cols - 1, startRight));
+        trees.add(new Tree(new Vec(2, 0)));
+        trees.add(new Tree(new Vec(cols - 3, rows - 1)));
 
-        while(top.pos != null || bottom.pos != null || left.pos != null || right.pos != null ) {
-            top.move(grid);
-            bottom.move(grid);
-            right.move(grid);
-            left.move(grid);
+        for(int i = 0; i < 4; i++) {
+            Tree top = new Tree(new Vec((int)(Math.random() * (cols - 4) + 2), 0));
+            Tree bottom = new Tree(new Vec((int)(Math.random() * (cols - 4) + 2), rows - 1));
+            trees.add(top);
+            trees.add(bottom);
         }
+
+        for(int i = 0; i < 4; i++) {
+            Tree left = new Tree(new Vec(0,(int) (Math.random() * (rows - 4) + 2)));
+            Tree right = new Tree(new Vec(cols - 1,(int) (Math.random() * (rows - 4) + 2)));
+            trees.add(left);
+            trees.add(right);
+        }
+
+
+        while(true) {
+            for(int i = 0; i < trees.size(); i++){
+                Tree t = trees.get(i);
+                for(int j = 0; j < 10 && t.pos != null; j++) {
+                    t.move(grid);
+                }
+                if(t.pos == null) {
+                    trees.remove(t);
+                }
+            }
+            if(trees.size() == 0) {
+                break;
+            }
+        }
+
 
         grid[0][1] = 0;
         grid[grid.length - 1][grid[0].length - 2] = 0;
