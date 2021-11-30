@@ -17,16 +17,16 @@ public class BasicHttpServerExample {
 
     private static void handleRequest(HttpExchange exchange) throws IOException {
 
+        System.out.println("\nIP: " + exchange.getRemoteAddress());
+
         URI requestURI = exchange.getRequestURI();
         String query = requestURI.getQuery();
 
-        System.out.println(query);
         if (query != null) {
             String[] splitQuery = query.split("&");
-            System.out.println(Arrays.toString(splitQuery));
             if (splitQuery.length == 2) {
-                    int rows; 
-                    int cols; 
+                int rows;
+                int cols;
                 try {
                     rows = Integer.parseInt(splitQuery[0].split("=")[1]);
                     cols = Integer.parseInt(splitQuery[1].split("=")[1]);
